@@ -9,12 +9,13 @@ namespace StackCalcForm
 
         private void AddOpenParen()
         {
-            if (ResultExpr.Text == "0" && !InputExpr.Text.ToString().EndsWith(')'))
+            if ((ResultExpr.Text == "0" || ResultExpr.Text == string.Empty) 
+                && !InputExpr.Text.ToString().EndsWith(')'))
             {
                 InputExpr.AppendText("(");
                 inAdds.Add("(");
             }
-            else if (ResultExpr.Text == "0")
+            else if (InputExpr.Text.ToString().EndsWith(')'))
             {
                 InputExpr.AppendText("*(");
                 inAdds.Add("*");
