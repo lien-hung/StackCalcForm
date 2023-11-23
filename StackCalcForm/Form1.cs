@@ -56,139 +56,47 @@ namespace StackCalcForm
             ResultExpr.SelectionLength = 0;
         }
 
-        private void AddPower()
+        private void AddOperation(string c)
         {
             string inputStr = InputExpr.Text.ToString();
-            if ((inputStr.EndsWith('+') || inputStr.EndsWith('-') || inputStr.EndsWith('*') || inputStr.EndsWith('/'))
-                && ResultExpr.Text == "0")
+            List<string> oprList = new List<string>() { "+", "-", "*", "/", "^" };
+            if (oprList.Any(c => inputStr.EndsWith(c)) && ResultExpr.Text == "0")
             {
                 InputExpr.Text = inputStr.Remove(inputStr.Length - 1);
-                InputExpr.AppendText("^");
+                InputExpr.AppendText(c);
                 inAdds.RemoveAt(inAdds.Count - 1);
-                inAdds.Add("^");
+                inAdds.Add(c);
             }
             else if (inputStr.EndsWith(')'))
             {
-                InputExpr.AppendText("^");
-                inAdds.Add("^");
+                InputExpr.AppendText(c);
+                inAdds.Add(c);
             }
             else
             {
-                InputExpr.AppendText(ResultExpr.Text + "^");
+                InputExpr.AppendText(ResultExpr.Text + c);
                 inAdds.Add(ResultExpr.Text.ToString());
-                inAdds.Add("^");
+                inAdds.Add(c);
             }
             ResultExpr.Text = "0";
             ResultExpr.SelectionStart = ResultExpr.Text.Length;
             ResultExpr.SelectionLength = 0;
         }
 
-        private void AddPlus()
+        private void AddDigit(string n)
         {
-            string inputStr = InputExpr.Text.ToString();
-            if ((inputStr.EndsWith('^') || inputStr.EndsWith('-') || inputStr.EndsWith('*') || inputStr.EndsWith('/'))
-                && ResultExpr.Text == "0")
+            if (n == "0" && ResultExpr.Text != "0")
             {
-                InputExpr.Text = inputStr.Remove(inputStr.Length - 1);
-                InputExpr.AppendText("+");
-                inAdds.RemoveAt(inAdds.Count - 1);
-                inAdds.Add("+");
+                ResultExpr.AppendText("0");
             }
-            else if (inputStr.EndsWith(')'))
+            else if (ResultExpr.Text == "0")
             {
-                InputExpr.AppendText("+");
-                inAdds.Add("+");
+                ResultExpr.Text = n;
             }
             else
             {
-                InputExpr.AppendText(ResultExpr.Text + "+");
-                inAdds.Add(ResultExpr.Text.ToString());
-                inAdds.Add("+");
+                ResultExpr.AppendText(n);
             }
-            ResultExpr.Text = "0";
-            ResultExpr.SelectionStart = ResultExpr.Text.Length;
-            ResultExpr.SelectionLength = 0;
-        }
-
-        private void AddMinus()
-        {
-            string inputStr = InputExpr.Text.ToString();
-            if ((inputStr.EndsWith('+') || inputStr.EndsWith('^') || inputStr.EndsWith('*') || inputStr.EndsWith('/'))
-                && ResultExpr.Text == "0")
-            {
-                InputExpr.Text = inputStr.Remove(inputStr.Length - 1);
-                InputExpr.AppendText("-");
-                inAdds.RemoveAt(inAdds.Count - 1);
-                inAdds.Add("-");
-            }
-            else if (inputStr.EndsWith(')'))
-            {
-                InputExpr.AppendText("-");
-                inAdds.Add("-");
-            }
-            else
-            {
-                InputExpr.AppendText(ResultExpr.Text + "-");
-                inAdds.Add(ResultExpr.Text.ToString());
-                inAdds.Add("-");
-            }
-            ResultExpr.Text = "0";
-            ResultExpr.SelectionStart = ResultExpr.Text.Length;
-            ResultExpr.SelectionLength = 0;
-        }
-
-        private void AddMulti()
-        {
-            string inputStr = InputExpr.Text.ToString();
-            if ((inputStr.EndsWith('+') || inputStr.EndsWith('-') || inputStr.EndsWith('^') || inputStr.EndsWith('/'))
-                && ResultExpr.Text == "0")
-            {
-                InputExpr.Text = inputStr.Remove(inputStr.Length - 1);
-                InputExpr.AppendText("*");
-                inAdds.RemoveAt(inAdds.Count - 1);
-                inAdds.Add("*");
-            }
-            else if (inputStr.EndsWith(')'))
-            {
-                InputExpr.AppendText("*");
-                inAdds.Add("*");
-            }
-            else
-            {
-                InputExpr.AppendText(ResultExpr.Text + "*");
-                inAdds.Add(ResultExpr.Text.ToString());
-                inAdds.Add("*");
-            }
-            ResultExpr.Text = "0";
-            ResultExpr.SelectionStart = ResultExpr.Text.Length;
-            ResultExpr.SelectionLength = 0;
-        }
-
-        private void AddDiv()
-        {
-            string inputStr = InputExpr.Text.ToString();
-            if ((inputStr.EndsWith('+') || inputStr.EndsWith('-') || inputStr.EndsWith('*') || inputStr.EndsWith('^'))
-                && ResultExpr.Text == "0")
-            {
-                InputExpr.Text = inputStr.Remove(inputStr.Length - 1);
-                InputExpr.AppendText("/");
-                inAdds.RemoveAt(inAdds.Count - 1);
-                inAdds.Add("/");
-            }
-            else if (inputStr.EndsWith(')'))
-            {
-                InputExpr.AppendText("/");
-                inAdds.Add("/");
-            }
-            else
-            {
-                InputExpr.AppendText(ResultExpr.Text + "/");
-                inAdds.Add(ResultExpr.Text.ToString());
-                inAdds.Add("/");
-            }
-            ResultExpr.Text = "0";
-            ResultExpr.SelectionStart = ResultExpr.Text.Length;
-            ResultExpr.SelectionLength = 0;
         }
 
         private void Evaluate()
@@ -250,144 +158,77 @@ namespace StackCalcForm
 
         private void ButtonPower_Click(object sender, EventArgs e)
         {
-            AddPower();
+            AddOperation("^");
         }
 
         private void ButtonPlus_Click(object sender, EventArgs e)
         {
-            AddPlus();
+            AddOperation("+");
         }
 
         private void ButtonMinus_Click(object sender, EventArgs e)
         {
-            AddMinus();
+            AddOperation("-");
         }
 
         private void ButtonMulti_Click(object sender, EventArgs e)
         {
-            AddMulti();
+            AddOperation("*");
         }
 
         private void ButtonDiv_Click(object sender, EventArgs e)
         {
-            AddDiv();
+            AddOperation("/");
         }
 
         private void Button0_Click(object sender, EventArgs e)
         {
-            if (ResultExpr.Text != "0")
-            {
-                ResultExpr.AppendText("0");
-            }
+            AddDigit("0");
         }
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            if (ResultExpr.Text == "0")
-            {
-                ResultExpr.Text = "1";
-            }
-            else
-            {
-                ResultExpr.AppendText("1");
-            }
+            AddDigit("1");
         }
 
         private void Button2_Click(object sender, EventArgs e)
         {
-            if (ResultExpr.Text == "0")
-            {
-                ResultExpr.Text = "2";
-            }
-            else
-            {
-                ResultExpr.AppendText("2");
-            }
+            AddDigit("2");
         }
 
         private void Button3_Click(object sender, EventArgs e)
         {
-            if (ResultExpr.Text == "0")
-            {
-                ResultExpr.Text = "3";
-            }
-            else
-            {
-                ResultExpr.AppendText("3");
-            }
+            AddDigit("3");
         }
 
         private void Button4_Click(object sender, EventArgs e)
         {
-            if (ResultExpr.Text == "0")
-            {
-                ResultExpr.Text = "4";
-            }
-            else
-            {
-                ResultExpr.AppendText("4");
-            }
+            AddDigit("4");
         }
 
         private void Button5_Click(object sender, EventArgs e)
         {
-            if (ResultExpr.Text == "0")
-            {
-                ResultExpr.Text = "5";
-            }
-            else
-            {
-                ResultExpr.AppendText("5");
-            }
+            AddDigit("5");
         }
 
         private void Button6_Click(object sender, EventArgs e)
         {
-            if (ResultExpr.Text == "0")
-            {
-                ResultExpr.Text = "6";
-            }
-            else
-            {
-                ResultExpr.AppendText("6");
-            }
-
+            AddDigit("6");
         }
 
         private void Button7_Click(object sender, EventArgs e)
         {
-            if (ResultExpr.Text == "0")
-            {
-                ResultExpr.Text = "7";
-            }
-            else
-            {
-                ResultExpr.AppendText("7");
-            }
+            AddDigit("7");
         }
 
         private void Button8_Click(object sender, EventArgs e)
         {
-            if (ResultExpr.Text == "0")
-            {
-                ResultExpr.Text = "8";
-            }
-            else
-            {
-                ResultExpr.AppendText("8");
-            }
+            AddDigit("8");
         }
 
         private void Button9_Click(object sender, EventArgs e)
         {
-            if (ResultExpr.Text == "0")
-            {
-                ResultExpr.Text = "9";
-            }
-            else
-            {
-                ResultExpr.AppendText("9");
-            }
+            AddDigit("9");
         }
 
         private void ButtonDot_Click(object sender, EventArgs e)
@@ -440,23 +281,23 @@ namespace StackCalcForm
             }
             if (e.Shift && e.KeyCode == Keys.D6)
             {
-                AddPower();
+                AddOperation("^");
             }
             if (e.Shift && e.KeyCode == Keys.Oemplus)
             {
-                AddPlus();
+                AddOperation("+");
             }
             if (e.KeyCode == Keys.OemMinus)
             {
-                AddMinus();
+                AddOperation("-");
             }
             if (e.Shift && e.KeyCode == Keys.D8)
             {
-                AddMulti();
+                AddOperation("*");
             }
             if (e.KeyData == Keys.OemQuestion)
             {
-                AddDiv();
+                AddOperation("/");
             }
             if (e.KeyCode == Keys.OemPeriod)
             {
