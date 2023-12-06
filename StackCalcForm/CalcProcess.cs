@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace StackCalcForm
+﻿namespace StackCalcForm
 {
     class CalcProcess
     {
@@ -14,7 +12,7 @@ namespace StackCalcForm
 
         public static string ProcessExpression()
         {
-            Stack addStack = new Stack();
+            CalcStack<object> addStack = new CalcStack<object>(Form1.InputAdds.Count);
             string postFix = string.Empty;
             string[] arrInAdds = Form1.InputAdds.ToArray();
             for (int i = 0; i < arrInAdds.Length; ++i)
@@ -30,22 +28,22 @@ namespace StackCalcForm
                 }
                 else if (opr == ")")
                 {
-                    while (addStack.Count > 0 && addStack.Peek()?.ToString() != "(")
+                    while (!addStack.IsEmpty() && addStack.Peek()?.ToString() != "(")
                     {
                         postFix += addStack.Pop()?.ToString() + " ";
                     }
-                    if (addStack.Count > 0 && addStack.Peek()?.ToString() != "(")
+                    if (!addStack.IsEmpty() && addStack.Peek()?.ToString() != "(")
                     {
                         return "Error";
                     }
-                    else if (addStack.Count > 0)
+                    else if (!addStack.IsEmpty())
                     {
                         addStack.Pop();
                     }
                 }
                 else
                 {
-                    while (addStack.Count > 0
+                    while (!addStack.IsEmpty()
                         && Precedence(opr) <= Precedence(addStack.Peek()?.ToString()))
                     {
                         postFix += addStack.Pop()?.ToString() + " ";
@@ -53,7 +51,7 @@ namespace StackCalcForm
                     addStack.Push(opr);
                 }
             }
-            while (addStack.Count > 0)
+            while (!addStack.IsEmpty())
             {
                 postFix += addStack.Pop()?.ToString() + " ";
             }
@@ -62,7 +60,7 @@ namespace StackCalcForm
 
         public static double CalculateFromPostfix(string postFix)
         {
-            Stack addStack = new Stack();
+            CalcStack<object> addStack = new CalcStack<object>(Form1.InputAdds.Count);
             string[] adds = postFix.Split(' ');
             bool isValid = true;
             for (int i = 0; i < adds.Length; i++)
