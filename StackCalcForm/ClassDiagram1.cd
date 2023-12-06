@@ -3,7 +3,7 @@
   <Class Name="StackCalcForm.CalcCtrls">
     <Position X="1.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAICAAAAAAAAAAAgAAIAAAACAAAAAAAACABAA=</HashCode>
+      <HashCode>AQAAAAAAICAAAAAAAAAAAgAAIAAAACAAAAAAAACAAAA=</HashCode>
       <FileName>CalcCtrls.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -29,10 +29,17 @@
       <FileName>Program.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="StackCalcForm.CalcStack&lt;T&gt;">
+    <Position X="3.5" Y="3.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAEAAAAAAoAAAwAAACAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>CalcStack.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Interface Name="StackCalcForm.IStackCalc">
     <Position X="3.5" Y="2.25" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAEAAAAAAQAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAEAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Form1.cs</FileName>
     </TypeIdentifier>
   </Interface>
