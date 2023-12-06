@@ -4,7 +4,6 @@ namespace StackCalcForm
     {
         string Input { get; set; }
         string Result { get; set; }
-        static List<string>? InputAdds;
     }
     public partial class Form1 : Form, IStackCalc
     {
