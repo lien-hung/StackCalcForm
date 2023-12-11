@@ -57,7 +57,8 @@
         {
             string inputStr = form.Input.ToString();
             List<string> oprList = new List<string>() { "+", "-", "*", "/", "^" };
-            if (oprList.Any(c => inputStr.EndsWith(c)) && form.Result == "0")
+            if (oprList.Any(c => inputStr.EndsWith(c))
+                && (form.Result == "0" || form.Result == string.Empty))
             {
                 form.Input = inputStr.Remove(inputStr.Length - 1);
                 form.Input += c;
