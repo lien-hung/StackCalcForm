@@ -5,7 +5,7 @@ namespace StackCalcForm
         string Input { get; set; }
         string Result { get; set; }
     }
-    public partial class Form1 : Form, IStackCalc
+    public partial class CalcForm : Form, IStackCalc
     {
         public string Input
         {
@@ -20,7 +20,7 @@ namespace StackCalcForm
         public static List<string> InputAdds = new List<string>();
         private readonly CalcCtrls ctrls;
 
-        public Form1()
+        public CalcForm()
         {
             InitializeComponent();
             ctrls = new CalcCtrls(this);

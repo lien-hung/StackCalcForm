@@ -14,20 +14,20 @@
                 && !form.Input.ToString().EndsWith(')'))
             {
                 form.Input += "(";
-                Form1.InputAdds.Add("(");
+                CalcForm.InputAdds.Add("(");
             }
             else if (form.Input.ToString().EndsWith(')'))
             {
                 form.Input += "*(";
-                Form1.InputAdds.Add("*");
-                Form1.InputAdds.Add("(");
+                CalcForm.InputAdds.Add("*");
+                CalcForm.InputAdds.Add("(");
             }
             else
             {
                 form.Input += form.Result + "*(";
-                Form1.InputAdds.Add(form.Result.ToString());
-                Form1.InputAdds.Add("*");
-                Form1.InputAdds.Add("(");
+                CalcForm.InputAdds.Add(form.Result.ToString());
+                CalcForm.InputAdds.Add("*");
+                CalcForm.InputAdds.Add("(");
             }
             form.Result = "0";
         }
@@ -37,8 +37,8 @@
             if (form.Input.ToString().EndsWith('('))
             {
                 form.Input += form.Result + ")";
-                Form1.InputAdds.Add(form.Result.ToString());
-                Form1.InputAdds.Add(")");
+                CalcForm.InputAdds.Add(form.Result.ToString());
+                CalcForm.InputAdds.Add(")");
             }
             else
             {
@@ -46,8 +46,8 @@
                 if (inputStr.Count(c => c == '(') > inputStr.Count(c => c == ')'))
                 {
                     form.Input += form.Result + ")";
-                    Form1.InputAdds.Add(form.Result.ToString());
-                    Form1.InputAdds.Add(")");
+                    CalcForm.InputAdds.Add(form.Result.ToString());
+                    CalcForm.InputAdds.Add(")");
                 }
             }
             form.Result = "0";
@@ -62,19 +62,19 @@
             {
                 form.Input = inputStr.Remove(inputStr.Length - 1);
                 form.Input += c;
-                Form1.InputAdds.RemoveAt(Form1.InputAdds.Count - 1);
-                Form1.InputAdds.Add(c);
+                CalcForm.InputAdds.RemoveAt(CalcForm.InputAdds.Count - 1);
+                CalcForm.InputAdds.Add(c);
             }
             else if (inputStr.EndsWith(')'))
             {
                 form.Input += c;
-                Form1.InputAdds.Add(c);
+                CalcForm.InputAdds.Add(c);
             }
             else
             {
                 form.Input += form.Result + c;
-                Form1.InputAdds.Add(form.Result.ToString());
-                Form1.InputAdds.Add(c);
+                CalcForm.InputAdds.Add(form.Result.ToString());
+                CalcForm.InputAdds.Add(c);
             }
             form.Result = "0";
         }
@@ -101,17 +101,17 @@
             if (inputStr.Count(c => c == '(') > inputStr.Count(c => c == ')'))
             {
                 form.Input += form.Result + ")";
-                Form1.InputAdds.Add(form.Result.ToString());
-                Form1.InputAdds.Add(")");
+                CalcForm.InputAdds.Add(form.Result.ToString());
+                CalcForm.InputAdds.Add(")");
             }
             else if (!inputStr.EndsWith(')'))
             {
                 form.Input += form.Result;
-                Form1.InputAdds.Add(form.Result.ToString());
+                CalcForm.InputAdds.Add(form.Result.ToString());
             }
             string postFix = CalcProcess.ProcessExpression();
             double result = CalcProcess.CalculateFromPostfix(postFix);
-            Form1.InputAdds.Clear(); form.Input = string.Empty;
+            CalcForm.InputAdds.Clear(); form.Input = string.Empty;
             if (double.IsNegativeInfinity(result))
             {
                 form.Result = "Error";

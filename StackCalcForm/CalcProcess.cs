@@ -12,9 +12,9 @@
 
         public static string ProcessExpression()
         {
-            CalcStack<object> addStack = new CalcStack<object>(Form1.InputAdds.Count);
+            CalcStack<object> addStack = new CalcStack<object>(CalcForm.InputAdds.Count);
             string postFix = string.Empty;
-            string[] arrInAdds = Form1.InputAdds.ToArray();
+            string[] arrInAdds = CalcForm.InputAdds.ToArray();
             for (int i = 0; i < arrInAdds.Length; ++i)
             {
                 string opr = arrInAdds[i];
@@ -60,7 +60,7 @@
 
         public static double CalculateFromPostfix(string postFix)
         {
-            CalcStack<object> addStack = new CalcStack<object>(Form1.InputAdds.Count);
+            CalcStack<object> addStack = new CalcStack<object>(CalcForm.InputAdds.Count);
             string[] adds = postFix.Split(' ');
             bool isValid = true;
             for (int i = 0; i < adds.Length; i++)
