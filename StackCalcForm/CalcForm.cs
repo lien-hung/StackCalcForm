@@ -118,24 +118,12 @@ namespace StackCalcForm
 
         private void ButtonDot_Click(object sender, EventArgs e)
         {
-            string inputNum = ResultExpr.Text.ToString();
-            if (!inputNum.Any(c => c == '.'))
-            {
-                ResultExpr.AppendText(".");
-            }
+            ctrls.AddDot();
         }
 
         private void ButtonPlusMinus_Click(object sender, EventArgs e)
         {
-            string inputNumStr = ResultExpr.Text.ToString();
-            if (inputNumStr.StartsWith("-"))
-            {
-                ResultExpr.Text = inputNumStr.TrimStart('-');
-            }
-            else
-            {
-                ResultExpr.Text = inputNumStr.Insert(0, "-");
-            }
+            ctrls.Negate();
         }
 
         private void ButtonC_Click(object sender, EventArgs e)
@@ -180,17 +168,17 @@ namespace StackCalcForm
             {
                 ctrls.AddOperation("*");
             }
-            if (e.KeyData == Keys.OemQuestion)
+            if (e.KeyCode == Keys.OemQuestion)
             {
                 ctrls.AddOperation("/");
             }
             if (e.KeyCode == Keys.OemPeriod)
             {
-                string inputNum = ResultExpr.Text.ToString();
-                if (!inputNum.Any(c => c == '.'))
-                {
-                    ResultExpr.AppendText(".");
-                }
+                ctrls.AddDot();
+            }
+            if (e.Shift && e.KeyCode == Keys.N)
+            {
+                ctrls.Negate();
             }
             if (e.KeyCode == Keys.C)
             {
