@@ -197,6 +197,8 @@ namespace StackCalcForm
             {
                 ResultExpr.Text = string.Empty;
             }
+            ResultExpr.SelectionStart = ResultExpr.Text.Length;
+            ResultExpr.SelectionLength = 0;
         }
 
         private void ResultExpr_KeyPress(object sender, KeyPressEventArgs e)
