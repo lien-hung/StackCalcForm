@@ -2,6 +2,11 @@
 {
     class CalcProcess
     {
+        /// <summary>
+        /// Xác định độ ưu tiên của toán tử
+        /// </summary>
+        /// <param name="x">Dấu toán tử</param>
+        /// <returns>Số nguyên chỉ độ ưu tiên của toán tử</returns>
         private static int Precedence(string? x)
         {
             if (x == "+" || x == "-") return 1;
@@ -9,7 +14,11 @@
             else if (x == "^") return 3;
             else return -1;
         }
-
+        /// <summary>
+        /// Chuyển biểu thức mà người dùng nhập từ dạng trung tố sang hậu tố,
+        /// dựa trên danh sách toán tử và toán hạng mà chương trình đang lưu
+        /// </summary>
+        /// <returns>Biểu thức dạng hậu tố</returns>
         public static string ProcessExpression()
         {
             CalcStack<object> addStack = new CalcStack<object>(CalcForm.InputAdds.Count);
@@ -57,7 +66,11 @@
             }
             return postFix;
         }
-
+        /// <summary>
+        /// Tính giá trị biểu thức mà người dùng nhập dựa trên dạng hậu tố của nó
+        /// </summary>
+        /// <param name="postFix">Biểu thức, dạng hậu tố</param>
+        /// <returns>Số chỉ kết quả tính toán của biểu thức</returns>
         public static double CalculateFromPostfix(string postFix)
         {
             CalcStack<object> addStack = new CalcStack<object>(CalcForm.InputAdds.Count);
