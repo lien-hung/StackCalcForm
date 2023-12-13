@@ -321,7 +321,7 @@
             ButtonDot.UseVisualStyleBackColor = true;
             ButtonDot.Click += ButtonDot_Click;
             // 
-            // Form1
+            // CalcForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -351,7 +351,7 @@
             Controls.Add(ResultExpr);
             Controls.Add(InputExpr);
             KeyPreview = true;
-            Name = "Form1";
+            Name = "CalcForm";
             Text = "Calculator";
             Load += Form1_Load;
             ResumeLayout(false);
