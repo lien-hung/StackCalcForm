@@ -7,7 +7,9 @@
         {
             this.form = form;
         }
-
+        /// <summary>
+        /// Thêm dấu mở ngoặc đơn (kèm theo số, nếu có) vào ô Input
+        /// </summary>
         public void AddOpenParen()
         {
             if ((form.Result == "0" || form.Result == string.Empty)
@@ -24,19 +26,28 @@
             }
             else
             {
-                form.Input += form.Result + "*(";
+                if (form.Result.StartsWith("-")) 
+                    form.Input += $"({form.Result})" + "*(";
+                else 
+                    form.Input += form.Result + "*(";
                 CalcForm.InputAdds.Add(form.Result.ToString());
                 CalcForm.InputAdds.Add("*");
                 CalcForm.InputAdds.Add("(");
             }
             form.Result = "0";
         }
-
+        /// <summary>
+        /// Thêm dấu đóng ngoặc đơn (kèm theo số, nếu có) vào ô Input,
+        /// nếu các dấu ngoặc không đi đầy đủ theo cặp
+        /// </summary>
         public void AddCloseParen()
         {
             if (form.Input.ToString().EndsWith('('))
             {
-                form.Input += form.Result + ")";
+                if (form.Result.StartsWith("-")) 
+                    form.Input += $"({form.Result})" + ")";
+                else 
+                    form.Input += form.Result + ")";
                 CalcForm.InputAdds.Add(form.Result.ToString());
                 CalcForm.InputAdds.Add(")");
             }
@@ -45,14 +56,22 @@
                 string inputStr = form.Input.ToString();
                 if (inputStr.Count(c => c == '(') > inputStr.Count(c => c == ')'))
                 {
-                    form.Input += form.Result + ")";
+                    if (form.Result.StartsWith("-"))
+                        form.Input += $"({form.Result})" + ")";
+                    else
+                        form.Input += form.Result + ")";
                     CalcForm.InputAdds.Add(form.Result.ToString());
                     CalcForm.InputAdds.Add(")");
                 }
             }
             form.Result = "0";
         }
-
+        /// <summary>
+        /// Thêm một trong các dấu phép toán cộng, trừ, nhân, chia hoặc lũy thừa
+        /// vào cuối biểu thức trong ô Input, hoặc thay dấu phép toán ở cuối biểu
+        /// thức thành dấu mới do người dùng nhập vào
+        /// </summary>
+        /// <param name="c">Dấu phép toán cần thêm</param>
         public void AddOperation(string c)
         {
             string inputStr = form.Input.ToString();
@@ -72,13 +91,20 @@
             }
             else
             {
-                form.Input += form.Result + c;
+                if (form.Result.StartsWith("-"))
+                    form.Input += $"({form.Result})" + c;
+                else
+                    form.Input += form.Result + c;
                 CalcForm.InputAdds.Add(form.Result.ToString());
                 CalcForm.InputAdds.Add(c);
             }
             form.Result = "0";
         }
-
+        /// <summary>
+        /// Thêm một chữ số vào số đang hiển thị trong ô Result
+        /// (chỉ có tác dụng khi người dùng nhấn vào nút bấm)
+        /// </summary>
+        /// <param name="n"></param>
         public void AddDigit(string n)
         {
             if (n == "0" && form.Result != "0")
@@ -94,19 +120,53 @@
                 form.Result += n;
             }
         }
-
+        /// <summary>
+        /// Thêm tối đa một dấu thập phân vào số trong ô Result
+        /// </summary>
+        public void AddDot()
+        {
+            string inputNum = form.Result.ToString();
+            if (!inputNum.Any(c => c == '.'))
+            {
+                form.Result += ".";
+            }
+        }
+        /// <summary>
+        /// Chuyển một số dương trong ô Result thành số âm (hoặc ngược lại)
+        /// </summary>
+        public void Negate()
+        {
+            string inputNumStr = form.Result.ToString();
+            if (inputNumStr.StartsWith("-"))
+            {
+                form.Result = inputNumStr.TrimStart('-');
+            }
+            else
+            {
+                form.Result = inputNumStr.Insert(0, "-");
+            }
+        }
+        /// <summary>
+        /// Tính giá trị biểu thức mà người dùng nhập và thông báo kết quả
+        /// </summary>
         public void Evaluate()
         {
             string inputStr = form.Input.ToString();
             if (inputStr.Count(c => c == '(') > inputStr.Count(c => c == ')'))
             {
-                form.Input += form.Result + ")";
+                if (form.Result.StartsWith("-"))
+                    form.Input += $"({form.Result})" + ")";
+                else
+                    form.Input += form.Result + ")";
                 CalcForm.InputAdds.Add(form.Result.ToString());
                 CalcForm.InputAdds.Add(")");
             }
             else if (!inputStr.EndsWith(')'))
             {
-                form.Input += form.Result;
+                if (form.Result.StartsWith("-"))
+                    form.Input += $"({form.Result})";
+                else
+                    form.Input += form.Result;
                 CalcForm.InputAdds.Add(form.Result.ToString());
             }
             string postFix = CalcProcess.ProcessExpression();
@@ -121,7 +181,9 @@
                 form.Result = result.ToString();
             }
         }
-
+        /// <summary>
+        /// Loại bỏ chữ số tận cùng của số trong ô Result
+        /// </summary>
         public void Backspace()
         {
             if (form.Result.Length == 1)
