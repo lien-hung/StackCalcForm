@@ -13,16 +13,15 @@
         public void AddOpenParen()
         {
             if ((form.Result == "0" || form.Result == string.Empty)
-                && !form.Input.ToString().EndsWith(')'))
+                && !form.Input.EndsWith(')'))
             {
                 form.Input += "(";
-                CalcForm.InputAdds.Add("(");
+                CalcForm.InputAdds.Add("("); 
             }
-            else if (form.Input.ToString().EndsWith(')'))
+            else if (form.Input.EndsWith(')'))
             {
                 form.Input += "*(";
-                CalcForm.InputAdds.Add("*");
-                CalcForm.InputAdds.Add("(");
+                CalcForm.InputAdds.AddRange(new string[] { "*", "(" });
             }
             else
             {
@@ -30,9 +29,7 @@
                     form.Input += $"({form.Result})" + "*(";
                 else 
                     form.Input += form.Result + "*(";
-                CalcForm.InputAdds.Add(form.Result.ToString());
-                CalcForm.InputAdds.Add("*");
-                CalcForm.InputAdds.Add("(");
+                CalcForm.InputAdds.AddRange(new string[] { form.Result, "*", "(" });
             }
             form.Result = "0";
         }
@@ -42,26 +39,24 @@
         /// </summary>
         public void AddCloseParen()
         {
-            if (form.Input.ToString().EndsWith('('))
+            if (form.Input.EndsWith('('))
             {
                 if (form.Result.StartsWith("-")) 
                     form.Input += $"({form.Result})" + ")";
                 else 
                     form.Input += form.Result + ")";
-                CalcForm.InputAdds.Add(form.Result.ToString());
-                CalcForm.InputAdds.Add(")");
+                CalcForm.InputAdds.AddRange(new string[] { form.Result, ")" });
             }
             else
             {
-                string inputStr = form.Input.ToString();
+                string inputStr = form.Input;
                 if (inputStr.Count(c => c == '(') > inputStr.Count(c => c == ')'))
                 {
                     if (form.Result.StartsWith("-"))
                         form.Input += $"({form.Result})" + ")";
                     else
                         form.Input += form.Result + ")";
-                    CalcForm.InputAdds.Add(form.Result.ToString());
-                    CalcForm.InputAdds.Add(")");
+                    CalcForm.InputAdds.AddRange(new string[] { form.Result, ")" });
                 }
             }
             form.Result = "0";
@@ -74,7 +69,7 @@
         /// <param name="c">Dấu phép toán cần thêm</param>
         public void AddOperation(string c)
         {
-            string inputStr = form.Input.ToString();
+            string inputStr = form.Input;
             List<string> oprList = new List<string>() { "+", "-", "*", "/", "^" };
             if (oprList.Any(c => inputStr.EndsWith(c))
                 && (form.Result == "0" || form.Result == string.Empty))
@@ -95,8 +90,57 @@
                     form.Input += $"({form.Result})" + c;
                 else
                     form.Input += form.Result + c;
-                CalcForm.InputAdds.Add(form.Result.ToString());
-                CalcForm.InputAdds.Add(c);
+                CalcForm.InputAdds.AddRange(new string[] { form.Result, c });
+            }
+            form.Result = "0";
+        }
+        /// <summary>
+        /// Thêm một trong các hàm logarit hoặc lượng giác mà ứng dụng hỗ trợ
+        /// vào biểu thức trong ô Input
+        /// </summary>
+        /// <param name="func">Hàm cần thêm vào</param>
+        public void AddFunction(string func)
+        {
+            List<string> inputs = CalcForm.InputAdds.ToList();
+            string[] funcList = { "log", "ln", "sin", "cos", "tan" };
+            if (form.Input.EndsWith(")") && funcList.Contains(func))
+            {
+                int counter = 0; string after = string.Empty;
+                for (int i = inputs.Count - 1; i >= 0; i--)
+                {
+                    if (inputs[i] == ")")
+                    {
+                        counter++;
+                    }
+                    else if (inputs[i] == "(")
+                    {
+                        counter--;
+                    }
+                    if (counter == 0)
+                    {
+                        if (funcList.Contains(inputs[i - 1]))
+                        {
+                            inputs.InsertRange(i - 1, new string[] { func, "(" });
+                            inputs.Add(")");
+                        }
+                        else
+                        {
+                            inputs.Insert(i, func);
+                        }
+                        break;
+                    }
+                }
+                foreach (string input in inputs)
+                {
+                    after += input;
+                }
+                CalcForm.InputAdds = inputs.ToList();
+                form.Input = after;
+            }
+            else
+            {
+                form.Input += func + $"({form.Result})";
+                CalcForm.InputAdds.AddRange(new string[] { func, "(", form.Result, ")" });
             }
             form.Result = "0";
         }
@@ -121,11 +165,26 @@
             }
         }
         /// <summary>
+        /// Thêm hằng số vào biểu thức trong ô Input
+        /// </summary>
+        /// <param name="c">Hằng số cần thêm</param>
+        public void AddConst(string c)
+        {
+            if (c == "pi")
+            {
+                form.Result = Math.PI.ToString();
+            }
+            else if (c == "e")
+            {
+                form.Result = Math.E.ToString();
+            }
+        }
+        /// <summary>
         /// Thêm tối đa một dấu thập phân vào số trong ô Result
         /// </summary>
         public void AddDot()
         {
-            string inputNum = form.Result.ToString();
+            string inputNum = form.Result;
             if (!inputNum.Any(c => c == '.'))
             {
                 form.Result += ".";
@@ -136,7 +195,7 @@
         /// </summary>
         public void Negate()
         {
-            string inputNumStr = form.Result.ToString();
+            string inputNumStr = form.Result;
             if (inputNumStr.StartsWith("-"))
             {
                 form.Result = inputNumStr.TrimStart('-');
@@ -151,15 +210,14 @@
         /// </summary>
         public void Evaluate()
         {
-            string inputStr = form.Input.ToString();
+            string inputStr = form.Input;
             if (inputStr.Count(c => c == '(') > inputStr.Count(c => c == ')'))
             {
                 if (form.Result.StartsWith("-"))
                     form.Input += $"({form.Result})" + ")";
                 else
                     form.Input += form.Result + ")";
-                CalcForm.InputAdds.Add(form.Result.ToString());
-                CalcForm.InputAdds.Add(")");
+                CalcForm.InputAdds.AddRange(new string[] { form.Result, ")" });
             }
             else if (!inputStr.EndsWith(')'))
             {
@@ -167,7 +225,7 @@
                     form.Input += $"({form.Result})";
                 else
                     form.Input += form.Result;
-                CalcForm.InputAdds.Add(form.Result.ToString());
+                CalcForm.InputAdds.Add(form.Result);
             }
             string postFix = CalcProcess.ProcessExpression();
             double result = CalcProcess.CalculateFromPostfix(postFix);
@@ -192,7 +250,7 @@
             }
             else
             {
-                string inputNumStr = form.Result.ToString();
+                string inputNumStr = form.Result;
                 form.Result = inputNumStr[..^1];
             }
         }
