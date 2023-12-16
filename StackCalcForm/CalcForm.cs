@@ -116,6 +116,41 @@ namespace StackCalcForm
             ctrls.AddDigit("9");
         }
 
+        private void ButtonLog_Click(object sender, EventArgs e)
+        {
+            ctrls.AddFunction("log");
+        }
+
+        private void ButtonLn_Click(object sender, EventArgs e)
+        {
+            ctrls.AddFunction("ln");
+        }
+
+        private void ButtonSin_Click(object sender, EventArgs e)
+        {
+            ctrls.AddFunction("sin");
+        }
+
+        private void ButtonCos_Click(object sender, EventArgs e)
+        {
+            ctrls.AddFunction("cos");
+        }
+
+        private void ButtonTan_Click(object sender, EventArgs e)
+        {
+            ctrls.AddFunction("tan");
+        }
+
+        private void ButtonPi_Click(object sender, EventArgs e)
+        {
+            ctrls.AddConst("pi");
+        }
+
+        private void ButtonE_Click(object sender, EventArgs e)
+        {
+            ctrls.AddConst("e");
+        }
+
         private void ButtonDot_Click(object sender, EventArgs e)
         {
             ctrls.AddDot();
@@ -172,11 +207,39 @@ namespace StackCalcForm
             {
                 ctrls.AddOperation("/");
             }
+            if (e.KeyCode == Keys.L)
+            {
+                ctrls.AddFunction("log");
+            }
+            if (e.KeyCode == Keys.N)
+            {
+                ctrls.AddFunction("ln");
+            }
+            if (e.KeyCode == Keys.S)
+            {
+                ctrls.AddFunction("sin");
+            }
+            if (e.KeyCode == Keys.D)
+            {
+                ctrls.AddFunction("cos");
+            }
+            if (e.KeyCode == Keys.T)
+            {
+                ctrls.AddFunction("tan");
+            }
+            if (e.KeyCode == Keys.P)
+            {
+                ctrls.AddConst("pi");
+            }
+            if (e.KeyCode == Keys.E)
+            {
+                ctrls.AddConst("e");
+            }
             if (e.KeyCode == Keys.OemPeriod)
             {
                 ctrls.AddDot();
             }
-            if (e.Shift && e.KeyCode == Keys.N)
+            if (e.Shift && e.KeyCode == Keys.M)
             {
                 ctrls.Negate();
             }
