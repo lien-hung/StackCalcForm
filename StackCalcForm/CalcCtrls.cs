@@ -118,7 +118,11 @@
                     }
                     if (counter == 0)
                     {
-                        if (funcList.Contains(inputs[i - 1]))
+                        if (i == 0)
+                        {
+                            inputs.Insert(0, func);
+                        }
+                        else if (funcList.Contains(inputs[i - 1]))
                         {
                             inputs.InsertRange(i - 1, new string[] { func, "(" });
                             inputs.Add(")");
