@@ -2,21 +2,23 @@
 {
     class CalcProcess
     {
+        static readonly string[] funcList = { "log", "ln", "sin", "cos", "tan" };
         /// <summary>
-        /// Xác định độ ưu tiên của toán tử
+        /// Xác định độ ưu tiên của toán tử hoặc hàm
         /// </summary>
-        /// <param name="x">Dấu toán tử</param>
-        /// <returns>Số nguyên chỉ độ ưu tiên của toán tử</returns>
+        /// <param name="x">Dấu toán tử hoặc hàm</param>
+        /// <returns>Số nguyên chỉ độ ưu tiên của toán tử hoặc hàm</returns>
         private static int Precedence(string? x)
         {
             if (x == "+" || x == "-") return 1;
             else if (x == "*" || x == "/") return 2;
             else if (x == "^") return 3;
+            else if (funcList.Contains(x)) return 4;
             else return -1;
         }
         /// <summary>
         /// Chuyển biểu thức mà người dùng nhập từ dạng trung tố sang hậu tố,
-        /// dựa trên danh sách toán tử và toán hạng mà chương trình đang lưu
+        /// dựa trên danh sách hàm, toán tử và toán hạng mà chương trình đang lưu
         /// </summary>
         /// <returns>Biểu thức dạng hậu tố</returns>
         public static string ProcessExpression()
@@ -30,6 +32,10 @@
                 if (double.TryParse(opr, out double num))
                 {
                     postFix += num + " ";
+                }
+                else if (funcList.Contains(opr))
+                {
+                    addStack.Push(opr);
                 }
                 else if (opr == "(")
                 {
@@ -64,7 +70,7 @@
             {
                 postFix += addStack.Pop()?.ToString() + " ";
             }
-            return postFix;
+            return postFix.Trim();
         }
         /// <summary>
         /// Tính giá trị biểu thức mà người dùng nhập dựa trên dạng hậu tố của nó
@@ -85,31 +91,39 @@
                 else
                 {
                     string opr = adds[i];
-                    if (addStack.Count > 1)
+                    if (funcList.Contains(opr))
                     {
-                        double a = Convert.ToDouble(addStack.Pop());
-                        double b = Convert.ToDouble(addStack.Pop());
+                        double x = Convert.ToDouble(addStack.Pop());
                         switch (opr)
                         {
-                            case "+": addStack.Push(b + a); break;
-                            case "-": addStack.Push(b - a); break;
-                            case "*": addStack.Push(b * a); break;
-                            case "/": addStack.Push(b / a); break;
-                            case "^": addStack.Push(Math.Pow(b, a)); break;
+                            case "log": addStack.Push(Math.Log10(x)); break;
+                            case "ln": addStack.Push(Math.Log(x)); break;
+                            case "sin": addStack.Push(Math.Sin(x)); break;
+                            case "cos": addStack.Push(Math.Cos(x)); break;
+                            case "tan": addStack.Push(Math.Tan(x)); break;
                             default: isValid = false; break;
-                        }
-                    }
-                    else if (addStack.Count == 1)
-                    {
-                        if (opr == "-")
-                        {
-                            double x = Convert.ToDouble(addStack.Pop());
-                            addStack.Push(-x);
                         }
                     }
                     else
                     {
-                        isValid = false;
+                        if (addStack.Count > 1)
+                        {
+                            double a = Convert.ToDouble(addStack.Pop());
+                            double b = Convert.ToDouble(addStack.Pop());
+                            switch (opr)
+                            {
+                                case "+": addStack.Push(b + a); break;
+                                case "-": addStack.Push(b - a); break;
+                                case "*": addStack.Push(b * a); break;
+                                case "/": addStack.Push(b / a); break;
+                                case "^": addStack.Push(Math.Pow(b, a)); break;
+                                default: isValid = false; break;
+                            }
+                        }
+                        else
+                        {
+                            isValid = false;
+                        }
                     }
                 }
             }
